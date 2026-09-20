@@ -1,0 +1,92 @@
+@import "tailwindcss";
+
+/* ============================================================
+   Maayan Nails — design tokens
+   Palette: ivory / cream / off-white / nude / dusty rose,
+   charcoal text, burgundy + rose-gold accents.
+   Inspired by (not copied from) anotherplanet.co.il: generous
+   whitespace, large imagery, quiet elegance.
+   ============================================================ */
+:root {
+  --color-ivory: #fbf8f4;
+  --color-cream: #f4ece3;
+  --color-off-white: #faf9f7;
+  --color-nude: #e8d5c4;
+  --color-dusty-rose: #d9b8ae;
+  --color-charcoal: #2c2725;
+  --color-charcoal-soft: #4a423d;
+  --color-burgundy: #6e2b3a;
+  --color-wine: #58202c;
+  --color-rose-gold: #b98b7a;
+
+  --background: var(--color-ivory);
+  --foreground: var(--color-charcoal);
+
+  --radius-card: 1.25rem;
+  --shadow-soft: 0 8px 30px -12px rgb(44 39 37 / 0.18);
+}
+
+@theme inline {
+  --color-ivory: var(--color-ivory);
+  --color-cream: var(--color-cream);
+  --color-off-white: var(--color-off-white);
+  --color-nude: var(--color-nude);
+  --color-dusty-rose: var(--color-dusty-rose);
+  --color-charcoal: var(--color-charcoal);
+  --color-charcoal-soft: var(--color-charcoal-soft);
+  --color-burgundy: var(--color-burgundy);
+  --color-wine: var(--color-wine);
+  --color-rose-gold: var(--color-rose-gold);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-brand: var(--font-playfair);
+  --font-sans: var(--font-heebo);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+.font-brand {
+  font-family: var(--font-brand), serif;
+  letter-spacing: 0.06em;
+}
+
+/* Visible, high-contrast focus ring for keyboard users everywhere */
+:focus-visible {
+  outline: 2px solid var(--color-burgundy);
+  outline-offset: 2px;
+  border-radius: 2px;
+}
+
+/* Skeleton loading shimmer */
+@keyframes shimmer {
+  0% { background-position: -400px 0; }
+  100% { background-position: 400px 0; }
+}
+.skeleton {
+  background: linear-gradient(90deg, var(--color-cream) 25%, var(--color-nude) 37%, var(--color-cream) 63%);
+  background-size: 800px 100%;
+  animation: shimmer 1.6s ease infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .skeleton { animation: none; }
+}
