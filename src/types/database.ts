@@ -251,7 +251,7 @@ export type Database = {
       profiles: Table<Profile>;
       customers: Table<Customer>;
       services: Table<Service>;
-      service_addons: Table<ServiceAddonLink, ServiceAddonLink, Partial<ServiceAddonLink>>;
+      service_addons: Table<ServiceAddonLink>;
       working_hours: Table<WorkingHours>;
       schedule_overrides: Table<ScheduleOverride>;
       blocked_times: Table<BlockedTime>;

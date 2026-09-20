@@ -81,6 +81,36 @@ export const businessSettingsSchema = z.object({
   }),
 });
 
+export const galleryItemFormSchema = z.object({
+  title: z.string().trim().max(120).optional().nullable(),
+  description: z.string().trim().max(500).optional().nullable(),
+  category: z.enum(["gel_polish", "extensions", "french", "nail_art", "before_after", "special"]),
+  imageUrl: z.string().url("נא להזין קישור תמונה תקין"),
+  thumbnailUrl: z.string().url().optional().nullable(),
+  orientation: z.enum(["portrait", "landscape", "square"]).default("square"),
+  isFeatured: z.boolean().default(false),
+  isPublished: z.boolean().default(true),
+  sortOrder: z.coerce.number().int().default(0),
+});
+export type GalleryItemFormInput = z.infer<typeof galleryItemFormSchema>;
+
+export const reviewStatusUpdateSchema = z.object({
+  status: z.enum(["draft", "approved", "published", "hidden"]),
+});
+
+export const reviewFormSchema = z.object({
+  customerName: z.string().trim().min(2, "נא להזין שם"),
+  rating: z.coerce.number().int().min(1).max(5).optional().nullable(),
+  content: z.string().trim().min(2, "נא להזין תוכן"),
+  status: z.enum(["draft", "approved", "published", "hidden"]).default("draft"),
+  sortOrder: z.coerce.number().int().default(0),
+});
+export type ReviewFormInput = z.infer<typeof reviewFormSchema>;
+
+export const customerNotesUpdateSchema = z.object({
+  notes: z.string().max(2000).optional().nullable(),
+});
+
 export const adminAppointmentStatusSchema = z.object({
   appointmentId: z.string().uuid(),
   status: z.enum([
