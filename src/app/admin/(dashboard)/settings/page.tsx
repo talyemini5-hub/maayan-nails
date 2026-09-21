@@ -2,12 +2,16 @@ import type { Metadata } from "next";
 import { SettingsForm } from "@/components/admin/settings-form";
 import { WorkingHoursForm } from "@/components/admin/working-hours-form";
 import { getBusinessSettings } from "@/lib/data/business-settings";
-import { getWorkingHours } from "@/lib/data/working-hours";
+import { getWorkingHours, getWorkingHoursBreaks } from "@/lib/data/working-hours";
 
 export const metadata: Metadata = { title: "הגדרות | ניהול", robots: { index: false, follow: false } };
 
 export default async function AdminSettingsPage() {
-  const [{ businessInfo, availability, policies }, hours] = await Promise.all([getBusinessSettings(), getWorkingHours()]);
+  const [{ businessInfo, availability, policies }, hours, breaks] = await Promise.all([
+    getBusinessSettings(),
+    getWorkingHours(),
+    getWorkingHoursBreaks(),
+  ]);
 
   return (
     <div className="flex flex-col gap-10">
@@ -20,7 +24,7 @@ export default async function AdminSettingsPage() {
 
       <div>
         <h2 className="mb-4 font-brand text-lg text-charcoal">שעות עבודה</h2>
-        <WorkingHoursForm hours={hours} />
+        <WorkingHoursForm hours={hours} breaks={breaks} />
       </div>
     </div>
   );

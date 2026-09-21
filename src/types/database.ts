@@ -87,9 +87,15 @@ export type WorkingHours = {
   is_open: boolean;
   start_time: string | null;
   end_time: string | null;
-  break_start: string | null;
-  break_end: string | null;
   updated_at: string;
+};
+
+export type WorkingHoursBreak = {
+  id: string;
+  day_of_week: number;
+  start_time: string;
+  end_time: string;
+  created_at: string;
 };
 
 export type ScheduleOverride = {
@@ -253,6 +259,7 @@ export type Database = {
       services: Table<Service>;
       service_addons: Table<ServiceAddonLink>;
       working_hours: Table<WorkingHours>;
+      working_hours_breaks: Table<WorkingHoursBreak>;
       schedule_overrides: Table<ScheduleOverride>;
       blocked_times: Table<BlockedTime>;
       appointments: Table<Appointment>;

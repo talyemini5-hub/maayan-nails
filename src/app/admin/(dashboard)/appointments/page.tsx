@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { AdminAppointmentRowCard } from "@/components/admin/admin-appointment-row";
+import { Button } from "@/components/ui/button";
 import { getAdminAppointments } from "@/lib/data/admin-appointments";
 import { nowMs } from "@/lib/time";
 
@@ -17,9 +18,12 @@ export default async function AdminAppointmentsPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <div>
-        <h1 className="font-brand text-2xl text-charcoal">תורים</h1>
-        <p className="mt-1 text-sm text-charcoal-soft">{appointments.length} תורים בסך הכל</p>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <h1 className="font-brand text-2xl text-charcoal">תורים</h1>
+          <p className="mt-1 text-sm text-charcoal-soft">{appointments.length} תורים בסך הכל</p>
+        </div>
+        <Button href="/admin/appointments/new">+ תור חדש</Button>
       </div>
 
       {pending.length > 0 && (

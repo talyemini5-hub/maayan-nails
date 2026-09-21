@@ -93,7 +93,7 @@ export function ServiceForm({
         <TextField label="מחיר (₪)" type="number" error={errors.price?.message} {...register("price")} />
         <TextField label="מחיר מקסימלי (אופציונלי)" type="number" error={errors.priceMax?.message} {...register("priceMax")} />
         <TextField
-          label="משך (דקות, אופציונלי לתוספת)"
+          label={kind === "treatment" ? "משך (דקות) *" : "משך (דקות, אופציונלי לתוספת)"}
           type="number"
           error={errors.durationMinutes?.message}
           {...register("durationMinutes")}

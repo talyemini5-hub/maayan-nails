@@ -19,10 +19,24 @@ export const serviceFormSchema = z
   .refine((data) => !data.priceMax || data.priceMax >= data.price, {
     message: "מחיר מקסימלי חייב להיות גדול או שווה למחיר הבסיס",
     path: ["priceMax"],
+  })
+  .refine((data) => data.kind !== "treatment" || (data.durationMinutes != null && data.durationMinutes >= 5), {
+    message: "נא להזין משך זמן לטיפול (בדקות) — בלעדיו לא ניתן לקבוע לו תור באתר",
+    path: ["durationMinutes"],
   });
 export type ServiceFormInput = z.infer<typeof serviceFormSchema>;
 
 const timeString = z.string().regex(/^\d{2}:\d{2}$/, "פורמט שעה לא תקין (HH:mm)");
+
+const workingHoursBreakSchema = z
+  .object({
+    startTime: timeString,
+    endTime: timeString,
+  })
+  .refine((b) => b.startTime < b.endTime, {
+    message: "שעת סיום ההפסקה חייבת להיות אחרי שעת ההתחלה",
+    path: ["endTime"],
+  });
 
 export const workingHoursDaySchema = z
   .object({
@@ -30,12 +44,17 @@ export const workingHoursDaySchema = z
     isOpen: z.boolean(),
     startTime: timeString.optional().nullable(),
     endTime: timeString.optional().nullable(),
-    breakStart: timeString.optional().nullable(),
-    breakEnd: timeString.optional().nullable(),
+    // No upper limit is enforced beyond this sanity cap — a real working day
+    // won't realistically need more break windows than this.
+    breaks: z.array(workingHoursBreakSchema).max(20).default([]),
   })
   .refine((d) => !d.isOpen || (d.startTime && d.endTime && d.startTime < d.endTime), {
     message: "שעת פתיחה חייבת להיות לפני שעת סגירה",
-  });
+  })
+  .refine(
+    (d) => !d.isOpen || d.breaks.every((b) => b.startTime >= (d.startTime ?? "") && b.endTime <= (d.endTime ?? "")),
+    { message: "שעות ההפסקה חייבות להיות בתוך שעות הפתיחה של אותו יום", path: ["breaks"] }
+  );
 
 export const scheduleOverrideSchema = z.object({
   date: z.string().regex(/^\d{4}-\d{2}-\d{2}$/),
@@ -126,3 +145,23 @@ export const adminAppointmentStatusSchema = z.object({
   ]),
   reason: z.string().max(300).optional().nullable(),
 });
+
+const newCustomerSchema = z.object({
+  fullName: z.string().trim().min(2, "נא להזין שם מלא"),
+  phone: z.string().trim().min(9, "נא להזין מספר טלפון תקין"),
+  email: z.string().trim().email("כתובת אימייל לא תקינה").optional().nullable(),
+});
+
+export const adminCreateAppointmentSchema = z
+  .object({
+    customerId: z.string().uuid().optional().nullable(),
+    newCustomer: newCustomerSchema.optional().nullable(),
+    serviceId: z.string().uuid(),
+    addonIds: z.array(z.string().uuid()).default([]),
+    startAt: z.string().datetime(),
+    notes: z.string().trim().max(500).optional().nullable(),
+  })
+  .refine((d) => !!d.customerId || !!d.newCustomer, {
+    message: "נא לבחור לקוחה קיימת או להזין פרטי לקוחה חדשה",
+    path: ["customerId"],
+  });
