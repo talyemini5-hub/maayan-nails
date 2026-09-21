@@ -6,16 +6,28 @@ import type { WorkingHours } from "@/types/database";
 
 const DAY_LABELS = ["ראשון", "שני", "שלישי", "רביעי", "חמישי", "שישי", "שבת"];
 
-type Row = { dayOfWeek: number; isOpen: boolean; startTime: string; endTime: string };
+type Row = {
+  dayOfWeek: number;
+  isOpen: boolean;
+  startTime: string;
+  endTime: string;
+  hasBreak: boolean;
+  breakStart: string;
+  breakEnd: string;
+};
 
 function toRows(hours: WorkingHours[]): Row[] {
   return Array.from({ length: 7 }, (_, day) => {
     const existing = hours.find((h) => h.day_of_week === day);
+    const hasBreak = Boolean(existing?.break_start && existing?.break_end);
     return {
       dayOfWeek: day,
       isOpen: existing?.is_open ?? false,
       startTime: existing?.start_time?.slice(0, 5) ?? "09:00",
       endTime: existing?.end_time?.slice(0, 5) ?? "19:00",
+      hasBreak,
+      breakStart: existing?.break_start?.slice(0, 5) ?? "12:00",
+      breakEnd: existing?.break_end?.slice(0, 5) ?? "14:00",
     };
   });
 }
@@ -40,6 +52,8 @@ export function WorkingHoursForm({ hours }: { hours: WorkingHours[] }) {
             isOpen: r.isOpen,
             startTime: r.isOpen ? r.startTime : null,
             endTime: r.isOpen ? r.endTime : null,
+            breakStart: r.isOpen && r.hasBreak ? r.breakStart : null,
+            breakEnd: r.isOpen && r.hasBreak ? r.breakEnd : null,
           })),
         }),
       });
@@ -64,20 +78,50 @@ export function WorkingHoursForm({ hours }: { hours: WorkingHours[] }) {
               {DAY_LABELS[row.dayOfWeek]}
             </label>
             {row.isOpen ? (
-              <div className="flex items-center gap-2 text-sm text-charcoal-soft">
-                <input
-                  type="time"
-                  value={row.startTime}
-                  onChange={(e) => updateRow(row.dayOfWeek, { startTime: e.target.value })}
-                  className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
-                />
-                <span>עד</span>
-                <input
-                  type="time"
-                  value={row.endTime}
-                  onChange={(e) => updateRow(row.dayOfWeek, { endTime: e.target.value })}
-                  className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
-                />
+              <div className="flex flex-wrap items-center gap-3 text-sm text-charcoal-soft">
+                <div className="flex items-center gap-2">
+                  <input
+                    type="time"
+                    value={row.startTime}
+                    onChange={(e) => updateRow(row.dayOfWeek, { startTime: e.target.value })}
+                    className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
+                  />
+                  <span>עד</span>
+                  <input
+                    type="time"
+                    value={row.endTime}
+                    onChange={(e) => updateRow(row.dayOfWeek, { endTime: e.target.value })}
+                    className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
+                  />
+                </div>
+
+                <label className="flex items-center gap-2 border-r border-charcoal/10 pr-3">
+                  <input
+                    type="checkbox"
+                    checked={row.hasBreak}
+                    onChange={(e) => updateRow(row.dayOfWeek, { hasBreak: e.target.checked })}
+                    className="h-4 w-4 accent-[var(--color-burgundy)]"
+                  />
+                  הפסקה באמצע היום
+                </label>
+
+                {row.hasBreak ? (
+                  <div className="flex items-center gap-2">
+                    <input
+                      type="time"
+                      value={row.breakStart}
+                      onChange={(e) => updateRow(row.dayOfWeek, { breakStart: e.target.value })}
+                      className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
+                    />
+                    <span>עד</span>
+                    <input
+                      type="time"
+                      value={row.breakEnd}
+                      onChange={(e) => updateRow(row.dayOfWeek, { breakEnd: e.target.value })}
+                      className="rounded-lg border border-charcoal/15 bg-ivory px-2 py-1"
+                    />
+                  </div>
+                ) : null}
               </div>
             ) : (
               <span className="text-sm text-charcoal-soft/60">סגור</span>
