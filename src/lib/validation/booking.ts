@@ -42,3 +42,10 @@ export const cancelAppointmentSchema = z.object({
 export const magicLinkRequestSchema = z.object({
   email: z.string().trim().email("כתובת אימייל לא תקינה"),
 });
+
+export const otpVerifySchema = z.object({
+  otp: z
+    .string()
+    .trim()
+    .regex(/^\d{6}$/, "הקוד חייב להכיל 6 ספרות"),
+});
