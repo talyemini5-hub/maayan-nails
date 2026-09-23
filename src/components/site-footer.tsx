@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { MapPin, Phone } from "lucide-react";
 import { Container } from "@/components/ui/container";
 import { InstagramIcon } from "@/components/ui/icons";
@@ -9,7 +10,13 @@ export function SiteFooter({ business }: { business: BusinessInfo }) {
     <footer className="bg-charcoal text-ivory mt-24 pb-24 md:pb-10">
       <Container className="py-14 grid gap-10 sm:grid-cols-3">
         <div>
-          <p className="font-brand text-xl tracking-widest mb-3">MAAYAN NAILS</p>
+          <Image
+            src="/brand/logo-full-light.png"
+            alt="Maayan Nails"
+            width={827}
+            height={548}
+            className="h-20 w-auto mb-4"
+          />
           <p className="text-sm text-ivory/70 leading-relaxed">
             סטודיו לציפורניים באופקים. הציפורניים שלך, בדיוק כמו שאת אוהבת.
           </p>
