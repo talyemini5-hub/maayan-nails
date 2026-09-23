@@ -7,7 +7,7 @@ export function ReviewsSection({ reviews }: { reviews: Review[] }) {
   if (!reviews.length) return null;
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-14 sm:py-20">
       <Container>
         <SectionHeading eyebrow="לקוחות מספרות" title="מה אומרות עלינו" />
         <div className="mt-12 grid gap-5 sm:grid-cols-3">

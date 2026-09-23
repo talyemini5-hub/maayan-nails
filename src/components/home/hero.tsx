@@ -22,7 +22,7 @@ export function Hero({ business }: { business: BusinessInfo }) {
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-charcoal/10" />
       </div>
 
-      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-28 pb-20 sm:pt-40 sm:pb-32 flex flex-col items-center text-center text-ivory">
+      <div className="mx-auto max-w-6xl px-5 sm:px-8 pt-28 pb-16 sm:pt-36 sm:pb-24 flex flex-col items-center text-center text-ivory">
         <p className="font-brand text-4xl sm:text-6xl tracking-[0.15em] mb-4 animate-[fadeIn_0.8s_ease]">
           MAAYAN NAILS
         </p>

@@ -5,7 +5,7 @@ import { whatsAppGeneralInquiry } from "@/lib/whatsapp";
 
 export function WhatsAppSection() {
   return (
-    <section className="py-16 sm:py-20">
+    <section className="py-12 sm:py-16">
       <Container className="flex flex-col items-center text-center gap-4">
         <MessageCircle className="size-8 text-[#25D366]" aria-hidden />
         <h2 className="font-brand text-2xl sm:text-3xl">יש שאלה? כתבי לנו בוואטסאפ</h2>

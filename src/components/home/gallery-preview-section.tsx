@@ -16,7 +16,7 @@ export function GalleryPreviewSection({ items, instagramUrl }: { items: GalleryI
   if (!preview.length) return null;
 
   return (
-    <section className="py-20 sm:py-28">
+    <section className="py-14 sm:py-20">
       <Container>
         <SectionHeading eyebrow="עבודות" title="עבודות שאנחנו אוהבות" />
 

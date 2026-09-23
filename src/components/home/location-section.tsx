@@ -23,7 +23,7 @@ export function LocationSection({ business }: { business: BusinessInfo }) {
   const appleMapsUrl = `https://maps.apple.com/?q=${encodedAddress}`;
 
   return (
-    <section id="location" className="py-20 sm:py-28">
+    <section id="location" className="py-14 sm:py-20">
       <Container className="grid gap-10 md:grid-cols-2">
         <div>
           <SectionHeading eyebrow="מיקום ושעות" title="איך מגיעים" align="start" />

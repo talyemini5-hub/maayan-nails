@@ -5,7 +5,7 @@ import type { AboutSettings } from "@/lib/data/business-settings";
 
 export function AboutSection({ about }: { about: AboutSettings }) {
   return (
-    <section id="about" className="py-20 sm:py-28 bg-cream/60">
+    <section id="about" className="py-14 sm:py-20 bg-cream/60">
       <Container className="grid gap-10 md:grid-cols-2 items-center">
         <div className="relative aspect-[4/5] rounded-[var(--radius-card)] overflow-hidden order-2 md:order-1">
           <Image

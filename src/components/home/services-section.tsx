@@ -11,7 +11,7 @@ export function ServicesSection({ services, policies }: { services: Service[]; p
   const list = treatments.length ? treatments : (PLACEHOLDER as Service[]);
 
   return (
-    <section id="services" className="py-20 sm:py-28 bg-cream/60">
+    <section id="services" className="py-14 sm:py-20 bg-cream/60">
       <Container>
         <SectionHeading eyebrow="מחירון ושירותים" title="השירותים שלנו" description="כל טיפול מותאם אישית, בדיוק ובאווירה נעימה." />
 
