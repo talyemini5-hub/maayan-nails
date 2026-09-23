@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { createAppointmentRequestSchema } from "@/lib/validation/booking";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendAppointmentNotification } from "@/lib/email/send";
@@ -66,9 +66,11 @@ export async function POST(request: Request) {
     return NextResponse.json({ error: "UNKNOWN", message: "אירעה שגיאה. נא לנסות שוב." }, { status: 500 });
   }
 
-  // Fire-and-forget: never let email delivery block or fail the booking response.
+  // Runs after the response is sent (via Next.js `after()`), so it never blocks or
+  // fails the booking — but Vercel keeps the function alive until it finishes, unlike
+  // a bare un-awaited promise, which the platform can cut off before it completes.
   const { data: service } = await supabase.from("services").select("name").eq("id", appointment.service_id).single();
-  void sendAppointmentNotification({
+  after(() => sendAppointmentNotification({
     type: appointment.appointment_status === "pending_approval" ? "appointment_requested" : "appointment_confirmed",
     appointmentId: appointment.id,
     recipientEmail: input.customer.email,
@@ -79,7 +81,7 @@ export async function POST(request: Request) {
       price: appointment.final_price,
       address: "הכרמים 104, אופקים",
     },
-  });
+  }));
 
   return NextResponse.json({ appointment }, { status: 201 });
 }

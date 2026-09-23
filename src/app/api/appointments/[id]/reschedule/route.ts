@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendAppointmentNotification } from "@/lib/email/send";
@@ -43,10 +43,11 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
 
   const { data: service } = await supabase.from("services").select("name").eq("id", appointment.service_id).single();
   if (customer.email) {
-    void sendAppointmentNotification({
+    const recipientEmail = customer.email;
+    after(() => sendAppointmentNotification({
       type: "appointment_rescheduled",
       appointmentId: appointment.id,
-      recipientEmail: customer.email,
+      recipientEmail,
       data: {
         customerName: customer.full_name,
         serviceName: service?.name ?? "",
@@ -54,7 +55,7 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
         price: appointment.final_price,
         address: "הכרמים 104, אופקים",
       },
-    });
+    }));
   }
 
   return NextResponse.json({ appointment });
