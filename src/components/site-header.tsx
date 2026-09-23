@@ -21,18 +21,15 @@ export function SiteHeader() {
   return (
     <header className="sticky top-0 z-40 bg-ivory/90 backdrop-blur border-b border-nude/40">
       <Container className="flex h-16 sm:h-20 items-center justify-between">
-        <Link href="/" className="flex items-center gap-2 sm:gap-3" aria-label="Maayan Nails — לדף הבית">
+        <Link href="/" className="flex items-center" aria-label="Maayan Nails — לדף הבית">
           <Image
             src="/brand/logo-mark.png"
             alt=""
-            width={44}
-            height={32}
-            className="h-8 sm:h-9 w-auto"
+            width={257}
+            height={189}
+            className="h-11 sm:h-14 w-auto"
             priority
           />
-          <span className="font-brand text-xl sm:text-2xl tracking-widest text-charcoal">
-            MAAYAN NAILS
-          </span>
         </Link>
 
         <nav className="hidden md:flex items-center gap-8" aria-label="ניווט ראשי">
