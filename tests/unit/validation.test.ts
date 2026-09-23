@@ -83,6 +83,13 @@ describe("createAppointmentRequestSchema", () => {
     const result = createAppointmentRequestSchema.safeParse({ ...base, serviceId: "not-a-uuid" });
     expect(result.success).toBe(false);
   });
+
+  it("accepts a startAt with a numeric timezone offset, as returned by Supabase's get_available_slots RPC", () => {
+    // Postgres/PostgREST serialize timestamptz with a numeric offset (e.g. "+00:00"),
+    // not a trailing "Z" — the booking wizard must accept this format as-is.
+    const result = createAppointmentRequestSchema.safeParse({ ...base, startAt: "2026-09-24T06:00:00+00:00" });
+    expect(result.success).toBe(true);
+  });
 });
 
 describe("serviceFormSchema", () => {

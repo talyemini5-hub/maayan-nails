@@ -3,7 +3,7 @@ import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendAppointmentNotification } from "@/lib/email/send";
 
-const bodySchema = z.object({ newStartAt: z.string().datetime() });
+const bodySchema = z.object({ newStartAt: z.string().datetime({ offset: true }) });
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;

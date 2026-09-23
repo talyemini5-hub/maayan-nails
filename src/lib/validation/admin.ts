@@ -66,8 +66,8 @@ export const scheduleOverrideSchema = z.object({
 
 export const blockedTimeSchema = z
   .object({
-    startAt: z.string().datetime(),
-    endAt: z.string().datetime(),
+    startAt: z.string().datetime({ offset: true }),
+    endAt: z.string().datetime({ offset: true }),
     blockType: z.enum(["personal", "errand", "vacation", "day_off", "custom"]),
     reason: z.string().max(200).optional().nullable(),
   })
@@ -158,7 +158,7 @@ export const adminCreateAppointmentSchema = z
     newCustomer: newCustomerSchema.optional().nullable(),
     serviceId: z.string().uuid(),
     addonIds: z.array(z.string().uuid()).default([]),
-    startAt: z.string().datetime(),
+    startAt: z.string().datetime({ offset: true }),
     notes: z.string().trim().max(500).optional().nullable(),
   })
   .refine((d) => !!d.customerId || !!d.newCustomer, {

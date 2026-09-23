@@ -20,7 +20,7 @@ export type CustomerDetailsInput = z.infer<typeof customerDetailsSchema>;
 export const createAppointmentRequestSchema = z.object({
   serviceId: z.string().uuid(),
   addonIds: z.array(z.string().uuid()).default([]),
-  startAt: z.string().datetime({ message: "תאריך/שעה לא תקינים" }),
+  startAt: z.string().datetime({ offset: true, message: "תאריך/שעה לא תקינים" }),
   customer: customerDetailsSchema,
   inspirationImageUrl: z.string().url().nullable().optional(),
   savedInspirationId: z.string().uuid().nullable().optional(),
@@ -32,7 +32,7 @@ export type CreateAppointmentRequestInput = z.infer<typeof createAppointmentRequ
 
 export const rescheduleAppointmentSchema = z.object({
   appointmentId: z.string().uuid(),
-  newStartAt: z.string().datetime(),
+  newStartAt: z.string().datetime({ offset: true }),
 });
 
 export const cancelAppointmentSchema = z.object({
