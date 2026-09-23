@@ -33,7 +33,8 @@ export type NotificationType =
   | "appointment_declined"
   | "appointment_rescheduled"
   | "appointment_cancelled"
-  | "appointment_reminder";
+  | "appointment_reminder"
+  | "admin_new_booking";
 export type NotificationStatus = "sent" | "failed" | "skipped";
 
 export type Profile = {

@@ -2,6 +2,7 @@ import { NextResponse, after } from "next/server";
 import { createAppointmentRequestSchema } from "@/lib/validation/booking";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendAppointmentNotification } from "@/lib/email/send";
+import { getServerEnv } from "@/lib/env";
 
 /**
  * Creates a new appointment request. Deliberately does NOT require the
@@ -70,8 +71,9 @@ export async function POST(request: Request) {
   // fails the booking — but Vercel keeps the function alive until it finishes, unlike
   // a bare un-awaited promise, which the platform can cut off before it completes.
   const { data: service } = await supabase.from("services").select("name").eq("id", appointment.service_id).single();
+  const isPendingApproval = appointment.appointment_status === "pending_approval";
   after(() => sendAppointmentNotification({
-    type: appointment.appointment_status === "pending_approval" ? "appointment_requested" : "appointment_confirmed",
+    type: isPendingApproval ? "appointment_requested" : "appointment_confirmed",
     appointmentId: appointment.id,
     recipientEmail: input.customer.email,
     data: {
@@ -82,6 +84,27 @@ export async function POST(request: Request) {
       address: "הכרמים 104, אופקים",
     },
   }));
+
+  // Internal alert to the business owner so a new request doesn't sit unnoticed
+  // until she happens to open the admin panel. Silently skipped (see
+  // sendAppointmentNotification) if ADMIN_NOTIFICATION_EMAIL isn't configured.
+  const adminEmail = getServerEnv().ADMIN_NOTIFICATION_EMAIL;
+  if (adminEmail) {
+    after(() => sendAppointmentNotification({
+      type: "admin_new_booking",
+      appointmentId: appointment.id,
+      recipientEmail: adminEmail,
+      data: {
+        customerName: input.customer.fullName,
+        customerPhone: input.customer.phone,
+        serviceName: service?.name ?? "",
+        startAt: appointment.start_at,
+        price: appointment.final_price,
+        address: "הכרמים 104, אופקים",
+        isPendingApproval,
+      },
+    }));
+  }
 
   return NextResponse.json({ appointment }, { status: 201 });
 }

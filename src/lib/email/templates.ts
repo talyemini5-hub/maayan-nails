@@ -8,6 +8,10 @@ export interface AppointmentEmailData {
   price: number;
   address: string;
   reason?: string | null;
+  /** Only used by the internal admin_new_booking alert. */
+  customerPhone?: string | null;
+  /** Only used by the internal admin_new_booking alert. */
+  isPendingApproval?: boolean;
 }
 
 const WRAPPER_STYLE =
@@ -69,6 +73,21 @@ export function buildEmailForNotification(type: NotificationType, data: Appointm
         subject: "תזכורת לתור מחר — Maayan Nails",
         html: wrap(
           `<p>היי ${data.customerName},</p><p>רק להזכיר שמחכה לך תור מחר 😊</p>${detailsTable(data)}<div style="text-align:center"><a style="${BUTTON_STYLE}" href="https://wa.me/972523298003">כתבי לנו בוואטסאפ</a></div>`
+        ),
+      };
+    case "admin_new_booking":
+      return {
+        subject: `${data.isPendingApproval ? "בקשת תור חדשה (ממתינה לאישור)" : "תור חדש נקבע"} — ${data.customerName}`,
+        html: wrap(
+          `<p>נקבע תור חדש באתר${data.isPendingApproval ? ", וממתין לאישור שלך בפאנל הניהול" : " ואושר אוטומטית"}:</p>${detailsTable(
+            data
+          )}<table style="width:100%;font-size:14px;color:#4a423d;border-collapse:collapse;margin:16px 0;"><tr><td style="padding:6px 0;">לקוחה:</td><td style="padding:6px 0;font-weight:600;">${
+            data.customerName
+          }</td></tr>${
+            data.customerPhone
+              ? `<tr><td style="padding:6px 0;">טלפון:</td><td style="padding:6px 0;font-weight:600;">${data.customerPhone}</td></tr>`
+              : ""
+          }</table>`
         ),
       };
   }
