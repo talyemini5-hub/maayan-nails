@@ -1,6 +1,5 @@
 import { Hero } from "@/components/home/hero";
 import { ServicesSection } from "@/components/home/services-section";
-import { AboutSection } from "@/components/home/about-section";
 import { GalleryPreviewSection } from "@/components/home/gallery-preview-section";
 import { ReviewsSection } from "@/components/home/reviews-section";
 import { LocationSection } from "@/components/home/location-section";
@@ -11,7 +10,7 @@ import { getAllActiveServices } from "@/lib/data/services";
 import { getPublishedGallery, getPublishedReviews } from "@/lib/data/gallery";
 
 export default async function HomePage() {
-  const [{ businessInfo, policies, about }, services, gallery, reviews] = await Promise.all([
+  const [{ businessInfo, policies }, services, gallery, reviews] = await Promise.all([
     getBusinessSettings(),
     getAllActiveServices(),
     getPublishedGallery(),
@@ -22,7 +21,6 @@ export default async function HomePage() {
     <>
       <Hero business={businessInfo} />
       <ServicesSection services={services} policies={policies} />
-      <AboutSection about={about} />
       <GalleryPreviewSection items={gallery} instagramUrl={businessInfo.instagram_url} />
       <ReviewsSection reviews={reviews} />
       <LocationSection business={businessInfo} />

@@ -3,6 +3,7 @@ import { createAppointmentRequestSchema } from "@/lib/validation/booking";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
 import { sendAppointmentNotification } from "@/lib/email/send";
 import { getServerEnv } from "@/lib/env";
+import { buildEmailActionUrl } from "@/lib/email/action-token";
 
 /**
  * Creates a new appointment request. Deliberately does NOT require the
@@ -90,6 +91,10 @@ export async function POST(request: Request) {
   // sendAppointmentNotification) if ADMIN_NOTIFICATION_EMAIL isn't configured.
   const adminEmail = getServerEnv().ADMIN_NOTIFICATION_EMAIL;
   if (adminEmail) {
+    // Only pending-approval bookings get action buttons — an already-confirmed
+    // booking has nothing left to approve/decline.
+    const confirmUrl = isPendingApproval ? buildEmailActionUrl(appointment.id, "confirm") : null;
+    const declineUrl = isPendingApproval ? buildEmailActionUrl(appointment.id, "decline") : null;
     after(() => sendAppointmentNotification({
       type: "admin_new_booking",
       appointmentId: appointment.id,
@@ -102,6 +107,8 @@ export async function POST(request: Request) {
         price: appointment.final_price,
         address: "הכרמים 104, אופקים",
         isPendingApproval,
+        confirmUrl,
+        declineUrl,
       },
     }));
   }

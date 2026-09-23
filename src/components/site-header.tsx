@@ -10,7 +10,6 @@ import { Container } from "@/components/ui/container";
 const links = [
   { href: "/#services", label: "שירותים ומחירון" },
   { href: "/gallery", label: "גלריה" },
-  { href: "/#about", label: "עלינו" },
   { href: "/#location", label: "מיקום" },
 ];
 

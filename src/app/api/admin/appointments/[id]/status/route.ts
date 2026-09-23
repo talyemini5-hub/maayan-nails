@@ -1,6 +1,8 @@
-import { NextResponse } from "next/server";
+import { NextResponse, after } from "next/server";
 import { z } from "zod";
 import { createServerSupabaseClient } from "@/lib/supabase/server";
+import { sendAppointmentNotification } from "@/lib/email/send";
+import type { NotificationType } from "@/types/database";
 
 /**
  * Admin-only (enforced by proxy.ts's updateSession for the whole /api/admin/**
@@ -22,6 +24,13 @@ const bodySchema = z.object({
   ]),
   reason: z.string().max(300).optional().nullable(),
 });
+
+/** Statuses that should notify the customer by email when an admin sets them. */
+const NOTIFICATION_TYPE_BY_STATUS: Partial<Record<string, NotificationType>> = {
+  confirmed: "appointment_confirmed",
+  declined: "appointment_declined",
+  cancelled: "appointment_cancelled",
+};
 
 export async function POST(request: Request, context: { params: Promise<{ id: string }> }) {
   const { id } = await context.params;
@@ -46,6 +55,33 @@ export async function POST(request: Request, context: { params: Promise<{ id: st
     }
     console.error("admin_set_appointment_status failed", error);
     return NextResponse.json({ error: "UNKNOWN", message: "אירעה שגיאה. נא לנסות שוב." }, { status: 500 });
+  }
+
+  const notificationType = NOTIFICATION_TYPE_BY_STATUS[parsed.data.status];
+  if (notificationType) {
+    const [{ data: service }, { data: customer }] = await Promise.all([
+      supabase.from("services").select("name").eq("id", data.service_id).single(),
+      supabase.from("customers").select("full_name, email").eq("id", data.customer_id).single(),
+    ]);
+    if (customer?.email) {
+      const recipientEmail = customer.email;
+      const reason = parsed.data.reason ?? null;
+      after(() =>
+        sendAppointmentNotification({
+          type: notificationType,
+          appointmentId: data.id,
+          recipientEmail,
+          data: {
+            customerName: customer.full_name,
+            serviceName: service?.name ?? "",
+            startAt: data.start_at,
+            price: data.final_price,
+            address: "הכרמים 104, אופקים",
+            reason,
+          },
+        })
+      );
+    }
   }
 
   return NextResponse.json({ appointment: data });

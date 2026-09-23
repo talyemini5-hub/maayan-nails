@@ -1,3 +1,4 @@
+import { Clock, Zap } from "lucide-react";
 import { SectionHeading } from "@/components/ui/section-heading";
 import { Container } from "@/components/ui/container";
 import { Button } from "@/components/ui/button";
@@ -15,6 +16,11 @@ export function ServicesSection({ services, policies }: { services: Service[]; p
       <Container>
         <SectionHeading eyebrow="מחירון ושירותים" title="השירותים שלנו" description="כל טיפול מותאם אישית, בדיוק ובאווירה נעימה." />
 
+        <div className="mt-6 mx-auto max-w-2xl flex items-center justify-center gap-2 rounded-full bg-burgundy/5 px-5 py-2.5 text-sm text-burgundy">
+          <Zap className="size-4 shrink-0" aria-hidden />
+          <span>רוב הטיפולים נמשכים 20–75 דקות בלבד — יוצאות מכאן מהר, עם ציפורניים מושלמות</span>
+        </div>
+
         <div className="mt-12 grid gap-5 sm:grid-cols-2 lg:grid-cols-3">
           {list.map((service) => (
             <article
@@ -28,7 +34,16 @@ export function ServicesSection({ services, policies }: { services: Service[]; p
                   {formatPriceRange(service.price ?? 0, service.price_max ?? null, service.is_price_from ?? false)}
                 </p>
                 {service.duration_minutes ? (
-                  <p className="text-sm text-charcoal-soft whitespace-nowrap">{formatDurationHe(service.duration_minutes)}</p>
+                  <p
+                    className={
+                      service.duration_minutes <= 20
+                        ? "flex items-center gap-1 whitespace-nowrap rounded-full bg-burgundy/10 px-2.5 py-1 text-xs font-medium text-burgundy"
+                        : "flex items-center gap-1 whitespace-nowrap text-sm text-charcoal-soft"
+                    }
+                  >
+                    <Clock className="size-3.5 shrink-0" aria-hidden />
+                    {formatDurationHe(service.duration_minutes)}
+                  </p>
                 ) : null}
               </div>
             </article>
@@ -67,6 +82,6 @@ export function ServicesSection({ services, policies }: { services: Service[]; p
 
 const PLACEHOLDER: Partial<Service>[] = [
   { name: "לק ג׳ל מבנה אנטומי", price: 140, is_price_from: false, duration_minutes: 60 },
-  { name: "מילוי אקריל", price: 140, is_price_from: false, duration_minutes: 75 },
+  { name: "מילוי אקריל", price: 140, is_price_from: false, duration_minutes: 60 },
   { name: "בניית ציפורניים בפוליג׳ל", price: 350, is_price_from: false, duration_minutes: 120 },
 ];

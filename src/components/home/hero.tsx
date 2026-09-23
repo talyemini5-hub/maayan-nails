@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { MapPin, Navigation } from "lucide-react";
+import { MapPin, Navigation, Zap } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { WhatsAppButton } from "@/components/ui/whatsapp-button";
 import { whatsAppGeneralInquiry } from "@/lib/whatsapp";
@@ -41,6 +41,9 @@ export function Hero({ business }: { business: BusinessInfo }) {
         </div>
 
         <div className="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
+          <span className="flex items-center gap-1.5 bg-ivory/10 backdrop-blur px-3 py-1.5 rounded-full">
+            <Zap className="size-4" aria-hidden /> טיפולים מהירים — 20–75 דקות
+          </span>
           <span className="flex items-center gap-1.5 bg-ivory/10 backdrop-blur px-3 py-1.5 rounded-full">
             <MapPin className="size-4" aria-hidden /> {business.address}
           </span>
