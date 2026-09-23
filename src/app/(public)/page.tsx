@@ -3,7 +3,6 @@ import { ServicesSection } from "@/components/home/services-section";
 import { AboutSection } from "@/components/home/about-section";
 import { GalleryPreviewSection } from "@/components/home/gallery-preview-section";
 import { ReviewsSection } from "@/components/home/reviews-section";
-import { BookingCtaSection } from "@/components/home/booking-cta-section";
 import { LocationSection } from "@/components/home/location-section";
 import { WhatsAppSection } from "@/components/home/whatsapp-section";
 import { StickyBookingCta } from "@/components/sticky-booking-cta";
@@ -26,7 +25,6 @@ export default async function HomePage() {
       <AboutSection about={about} />
       <GalleryPreviewSection items={gallery} instagramUrl={businessInfo.instagram_url} />
       <ReviewsSection reviews={reviews} />
-      <BookingCtaSection />
       <LocationSection business={businessInfo} />
       <WhatsAppSection />
       <StickyBookingCta />

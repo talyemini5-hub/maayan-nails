@@ -17,7 +17,7 @@ export function Hero({ business }: { business: BusinessInfo }) {
           fill
           priority
           sizes="100vw"
-          className="object-cover object-top"
+          className="object-cover object-[center_60%]"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-charcoal/10" />
       </div>
