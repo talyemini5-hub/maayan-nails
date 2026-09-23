@@ -12,12 +12,12 @@ export function Hero({ business }: { business: BusinessInfo }) {
     <section className="relative overflow-hidden">
       <div className="absolute inset-0 -z-10">
         <Image
-          src="https://images.unsplash.com/photo-1604654894610-df63bc536371?w=1600&q=80"
+          src="/hero/hero-ombre-stiletto.jpg"
           alt=""
           fill
           priority
           sizes="100vw"
-          className="object-cover"
+          className="object-cover object-top"
         />
         <div className="absolute inset-0 bg-gradient-to-t from-charcoal/70 via-charcoal/30 to-charcoal/10" />
       </div>

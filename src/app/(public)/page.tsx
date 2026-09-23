@@ -1,12 +1,9 @@
 import { Hero } from "@/components/home/hero";
-import { FeaturedWork } from "@/components/home/featured-work";
 import { ServicesSection } from "@/components/home/services-section";
 import { AboutSection } from "@/components/home/about-section";
-import { PricingSection } from "@/components/home/pricing-section";
-import { BeforeAfterSection } from "@/components/home/before-after-section";
+import { GalleryPreviewSection } from "@/components/home/gallery-preview-section";
 import { ReviewsSection } from "@/components/home/reviews-section";
 import { BookingCtaSection } from "@/components/home/booking-cta-section";
-import { InstagramSection } from "@/components/home/instagram-section";
 import { LocationSection } from "@/components/home/location-section";
 import { WhatsAppSection } from "@/components/home/whatsapp-section";
 import { StickyBookingCta } from "@/components/sticky-booking-cta";
@@ -25,14 +22,11 @@ export default async function HomePage() {
   return (
     <>
       <Hero business={businessInfo} />
-      <FeaturedWork items={gallery} />
-      <ServicesSection services={services} />
+      <ServicesSection services={services} policies={policies} />
       <AboutSection about={about} />
-      <PricingSection services={services} policies={policies} />
-      <BeforeAfterSection items={gallery} />
+      <GalleryPreviewSection items={gallery} instagramUrl={businessInfo.instagram_url} />
       <ReviewsSection reviews={reviews} />
       <BookingCtaSection />
-      <InstagramSection items={gallery} instagramUrl={businessInfo.instagram_url} />
       <LocationSection business={businessInfo} />
       <WhatsAppSection />
       <StickyBookingCta />
